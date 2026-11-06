@@ -6,7 +6,7 @@ namespace Obens\Sdk;
 
 class ObensClient
 {
-    public const VERSION = '0.1.3';
+    public const VERSION = '0.1.4';
 
     public readonly Resource $subActors;
     public readonly Resource $facilities;
