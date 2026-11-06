@@ -102,11 +102,9 @@ class Http
         $text = curl_exec($ch);
         if ($text === false) {
             $error = curl_error($ch);
-            curl_close($ch);
             throw new \RuntimeException("$method $url failed: $error");
         }
         $status = (int) curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
-        curl_close($ch);
         return [$status, (string) $text, $responseHeaders];
     }
 
