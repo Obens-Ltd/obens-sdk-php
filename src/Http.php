@@ -25,7 +25,9 @@ class Http
         private int $maxRetries = 3,
         private float $retryDelay = 0.5,
         ?callable $transport = null,
-        private ?string $accountId = null
+        private ?string $accountId = null,
+        /** @var (callable():array<string,string>)|null headers that need a lookup first (the workspace id) */
+        private $extraHeaders = null
     ) {
         if ($baseUrl === '') {
             throw new \InvalidArgumentException('baseUrl is required');
@@ -74,6 +76,11 @@ class Http
     private function send(string $method, string $url, ?string $payload): array
     {
         $headers = ['X-API-KEY: ' . $this->apiKey, 'Accept: application/json'];
+        if ($this->extraHeaders) {
+            foreach (($this->extraHeaders)() as $name => $value) {
+                $headers[] = $name . ': ' . $value;
+            }
+        }
         if ($payload !== null) {
             $headers[] = 'Content-Type: application/json';
         }
